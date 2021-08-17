@@ -2,63 +2,101 @@
 <!--th:replace:不要自己的主标签，保留th:fragment的主标签。-->
 <!--th:include:保留自己的主标签，不要th:fragment的主标签。（官方3.0后不推荐-->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+
+<head th:fragment="head(title)">
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" th:href="@{../vendors/animate.css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{../vendors/fancybox/jquery.fancybox.min.css}">
+    <link rel="stylesheet" th:href="@{../css/style.css}">
+    <script th:src="@{../vendors/jquery/jquery.min.js}"></script>
+    <script th:src="@{../js/loader.js}"></script>
 </head>
 <body>
 
+<div class="oleez-loader"></div>
+<header th:fragment="header(index)" class="oleez-header" >
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" th:href="@{/}"><img th:src="@{../img/Logo_2.svg}" alt="Oleez"></a>
+        <ul class="nav nav-actions d-lg-none ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#!" data-toggle="searchModal">
+                    <img th:src="@{../img/search.svg}" alt="search">
+                </a>
+            </li>
+            <li class="nav-item nav-item-cart">
+                <a class="nav-link" href="#!">
+                    <span class="cart-item-count">0</span>
+                    <img th:src="@{../img/shopping-cart.svg}" alt="cart">
+                </a>
+            </li>
+            <li class="nav-item dropdown d-none d-sm-block">
+                <a class="nav-link dropdown-toggle" href="#!" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ENG</a>
+                <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                    <a class="dropdown-item" href="#!">ARB</a>
+                    <a class="dropdown-item" href="#!">FRE</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#!" data-toggle="offCanvasMenu">
+                    <img th:src="@{../img/social%20icon@2x.svg}" alt="social-nav-toggle">
+                </a>
+            </li>
+        </ul>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#oleezMainNav" aria-controls="oleezMainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-<nav th:fragment="header(index)" class="navbar navbar-expand-lg navbar-dark bg-dark ">
+        <div class="collapse navbar-collapse" id="oleezMainNav">
+            <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
+                <li th:class="${index}=='index'?'nav-item active':'nav-item'">
+                    <a class="nav-link" th:href="@{/}">Home</a>
+                </li>
+                <li th:class="${index}=='category'?'nav-item active':'nav-item'">
+                    <a class="nav-link" th:href="@{/category}">Category</a>
+                </li>
+                <li th:class="${index}=='archive'?'nav-item active':'nav-item'">
+                    <a class="nav-link" th:href="@{/archive}">Archive</a>
+                </li>
+                <li th:class="${index}=='about'?'nav-item active':'nav-item'">
+                    <a class="nav-link" th:href="@{/about}">About</a>
+                </li>
+            </ul>
 
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse justify-content-end"  id="navbarSupportedContent">
-
-
-    <form class="form-inline float-right ">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-    <ul class="navbar-nav  ">
-      <li th:class="${index}=='index'?'nav-item active':'nav-item'">
-        <a class="nav-link " href="#">主页</a>
-      </li>
-      <li th:class="${index}=='category'?'nav-item active':'nav-item'">
-        <a class="nav-link" href="#">分类</a>
-      </li>
-      <li th:class="${index}=='archive'?'nav-item active':'nav-item'">
-        <a class="nav-link" href="#">归档</a>
-      </li>
-      <li th:class="${index}=='about'?'nav-item active':'nav-item'">
-        <a class="nav-link" href="#">关于</a>
-      </li>
-<!--      <li class="nav-item dropdown">-->
-<!--        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--          Dropdown-->
-<!--        </a>-->
-<!--        <div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
-<!--          <a class="dropdown-item" href="#">Action</a>-->
-<!--          <a class="dropdown-item" href="#">Another action</a>-->
-<!--          <div class="dropdown-divider"></div>-->
-<!--          <a class="dropdown-item" href="#">Something else here</a>-->
-<!--        </div>-->
-<!--      </li>-->
-<!--      <li class="nav-item">-->
-<!--        <a class="nav-link disabled" href="#">Disabled</a>-->
-<!--      </li>-->
-    </ul>
-
-  </div>
-</nav>
-
-
-
+            <ul class="navbar-nav d-none d-lg-flex">
+                <li class="nav-item active">
+                    <a class="nav-link nav-link-btn" href="#!" data-toggle="searchModal">
+                        <img th:src="@{../img/search.svg}" alt="search">
+                    </a>
+                </li>
+                <li class="nav-item nav-item-cart">
+                    <a class="nav-link nav-link-btn" href="#!">
+                        <span class="cart-item-count">0</span>
+                        <img th:src="@{../img/shopping-cart.svg}" alt="cart">
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#!" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ENG</a>
+                    <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <a class="dropdown-item" href="#!">ARB</a>
+                        <a class="dropdown-item" href="#!">FRE</a>
+                    </div>
+                </li>
+                <li class="nav-item ml-5">
+                    <a class="nav-link pr-0 nav-link-btn" href="#!" data-toggle="offCanvasMenu">
+                        <img th:src="@{../img/social%20icon@2x.svg}" alt="social-nav-toggle">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
 
 </body>
 </html>

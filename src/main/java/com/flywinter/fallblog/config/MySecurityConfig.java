@@ -25,7 +25,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder()).withUser("dev")
-                .password(new BCryptPasswordEncoder().encode("123456")).roles("ADMIN");
+                .password(new BCryptPasswordEncoder().encode("123456")).roles("ADMIN")
+                .and()
+                .withUser("guest")
+                .password(new BCryptPasswordEncoder().encode("123456")).roles("USER");
 
         auth.jdbcAuthentication()
                 .dataSource(dataSource)

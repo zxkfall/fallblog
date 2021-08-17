@@ -14,3 +14,12 @@ spring:
 
 server:
   port: 8081
+#mybatis:
+#  configuration:
+#    log-prefix: LOG4J
+
+#  1. logging.level.yourdaoclasspackagename=debug
+logging:
+  level:
+    com.flywinter.fallblog.dao: debug
+#  2. mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
