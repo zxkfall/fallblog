@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{admin/fragment/common::head(Publish)}">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Blank</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="../../static/vendors/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="../../static/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="~{admin/fragment/common::sidebar(publish,publish)}"
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="admin/fragment/common::topbar"
+                 class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+
+                <!--设置id为oriContent，如果想实现实时更新，使用onkeyup方法-->
+
+                <textarea id="oriContent" style="height:400px;width:600px;" onkeyup="convert()"></textarea>
+
+                <!-- -设置展示的div添加id -->
+                <div id="result"></div>
+                <div class="mermaid">
+                    graph LR
+                    A --- B
+                    B-->C[fa:fa-ban forbidden]
+                    B-->D(fa:fa-spinner);
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Your Website 2020</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="~{admin/fragment/common::logout}" class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel">
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{../vendors/jquery/jquery.min.js}"></script>
+<script th:src="@{../vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{../vendors/jquery-easing/jquery.easing.min.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{../js/sb-admin-2.min.js}"></script>
+
+
+<!--    Markdown-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.2.0/markdown-it.min.js"
+        integrity="sha512-cTQeM/op796Fp1ZUxfech8gSMLT/HvrXMkRGdGZGQnbwuq/obG0UtcL04eByVa99qJik7WlnlQOr5/Fw5B36aw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/mermaid/8.11.2/mermaid.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+<script type="text/javascript">
+    mermaid.initialize({startOnLoad:true});
+    hljs.highlightAll();
+    const mermaidChart = (code) => {
+        try {
+            return `<div class="mermaid">${code}</div>`
+        } catch ({str, hash}) {
+            return `<pre>${str}</pre>`
+        }
+    }
+    let md = window.markdownit({
+        highlight: function (str, lang) {
+            mermaid.initialize({startOnLoad:true});
+            let esc = md.utils.escapeHtml;
+            console.log(lang)
+            console.log(str)
+            if (lang && hljs.getLanguage(lang)) {
+                try {
+                    return hljs.highlight(lang, str, true).value;
+                } catch (__) {
+                }
+            } else if (lang === 'mermaid') {
+                // return mermaidChart(str)
+                return '<pre class="mermaid">' + mermaid.mermaidAPI.render('mermaid', str) + '</pre>';
+
+            } else {
+                return '<pre class="hljs"><code>' + esc(str) + '</code></pre>';
+            }
+            return '';
+        }
+    });
+
+    function convert() {
+
+        let text = document.getElementById("oriContent").value;
+        let result = md.render(text)
+        document.getElementById("result").innerHTML = result;
+
+    }
+
+
+</script>
+
+</body>
+
+</html>

@@ -42,7 +42,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/","/index.html","/**").permitAll()
+                .antMatchers("/","/dashboard.html","/**").permitAll()
                 .and()
                 .formLogin().loginPage("/login")
                 .usernameParameter("username")
@@ -51,6 +51,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login")//登录失败跳到登录页面
                 .and()
                 .rememberMe().rememberMeParameter("remember").tokenValiditySeconds(60*60*24*30)
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
                 ;
     }
 
