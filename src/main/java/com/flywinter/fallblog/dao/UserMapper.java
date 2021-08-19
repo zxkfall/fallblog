@@ -16,4 +16,6 @@ public interface UserMapper {
 
     @Select("select * from t_user where email = #{email}")
     TUser getUserByEmail(@Param("email") String email);
+
+
 }

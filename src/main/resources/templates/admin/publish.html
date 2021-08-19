@@ -11,17 +11,20 @@
 
     <title>SB Admin 2 - Blank</title>
 
-    <!-- Custom fonts for this template-->
-    <link href="../../static/vendors/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">-->
 
-    <!-- Custom styles for this template-->
-    <link href="../../static/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/a11y-dark.min.css" />    <!-- Custom styles for this template-->
 
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
 <body id="page-top">
 
 <!-- Page Wrapper -->
@@ -49,20 +52,96 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+                <h1 class="h3 mb-4 text-gray-800">Publish</h1>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">标题</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Title" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
 
-                <!--设置id为oriContent，如果想实现实时更新，使用onkeyup方法-->
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">描述</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Description" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
 
-                <textarea id="oriContent" style="height:400px;width:600px;" onkeyup="convert()"></textarea>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">分类</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                        <option selected>Choose...</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">封面</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02">
+                        <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
+                    </div>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
+                    </div>
+                </div>
+
+
+
+
+
+                <link rel="stylesheet" th:href="@{../css/editormd.css}" />
+                <div id="test-editor">
+    <textarea style="display:none;"></textarea>
+                </div>
+                <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+                <script th:src="@{../js/editormd.js}"></script>
+                <script type="text/javascript">
+                    $(function() {
+                        // let editor = editormd("test-editor", {
+                        //     // width  : "100%",
+                        //     // height : "100%",
+                        //     path   : "../lib/"
+                        // });
+                        let editor = editormd("test-editor", { //注意1：这里的就是上面的DIV的id属性值
+                            placeholder : '欢迎使用博客',
+                            // width : "90%",
+                            height : 400,
+                            syncScrolling : "single",
+                            emoji : true,
+                            path : "../lib/", //注意2：你的路径
+                            saveHTMLToTextarea : true,
+                            tocm : true, // Using [TOCM]
+                            tex : true, // 开启科学公式TeX语言支持，默认关闭
+                            flowChart : true, // 开启流程图支持，默认关闭
+                            pluginPath:'../plugin/',
+                            /* 上传图片配置 */
+                            imageUpload : true,
+                            imageFormats : [ "jpg", "jpeg", "gif", "png", "bmp", "webp","jpeg" ],
+                            imageUploadURL : "/admin/image", //注意你后端的上传图片服务地址
+                        })
+
+                    });
+
+                    // editor.startOnLoad
+                </script>
+
+
 
                 <!-- -设置展示的div添加id -->
                 <div id="result"></div>
-                <div class="mermaid">
-                    graph LR
-                    A --- B
-                    B-->C[fa:fa-ban forbidden]
-                    B-->D(fa:fa-spinner);
-                </div>
+<!--                <div class="mermaid">-->
+<!--                    graph LR-->
+<!--                    A -&#45;&#45; B-->
+<!--                    B&ndash;&gt;C[fa:fa-ban forbidden]-->
+<!--                    B&ndash;&gt;D(fa:fa-spinner);-->
+<!--                </div>-->
             </div>
             <!-- /.container-fluid -->
 
@@ -111,8 +190,7 @@
         integrity="sha512-cTQeM/op796Fp1ZUxfech8gSMLT/HvrXMkRGdGZGQnbwuq/obG0UtcL04eByVa99qJik7WlnlQOr5/Fw5B36aw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<link rel="stylesheet"
-      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/mermaid/8.11.2/mermaid.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
@@ -135,19 +213,25 @@
             console.log(str)
             if (lang && hljs.getLanguage(lang)) {
                 try {
-                    return hljs.highlight(lang, str, true).value;
+                    // return hljs.highlight(lang, str, true).value;
+                    return  '<pre class="hljs"><code>' +hljs.highlight(lang, str, true).value +    '</code></pre>';
                 } catch (__) {
                 }
             } else if (lang === 'mermaid') {
                 // return mermaidChart(str)
                 return '<pre class="mermaid">' + mermaid.mermaidAPI.render('mermaid', str) + '</pre>';
+                // return '<pre class="mermaid">' + mermaid.mermaidAPI.render('mermaid', str) + '</pre>';
+                // return  mermaid.mermaidAPI.render('mermaid', str) ;
 
             } else {
                 return '<pre class="hljs"><code>' + esc(str) + '</code></pre>';
             }
-            return '';
-        }
-    });
+            return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+        },
+        html:true,
+        linkify:true,
+        typographer:true,
+    }).enable('image').enable([ 'link' ]);
 
     function convert() {
 

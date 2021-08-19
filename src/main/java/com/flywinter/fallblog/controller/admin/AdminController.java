@@ -1,9 +1,12 @@
 package com.flywinter.fallblog.controller.admin;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Date:2021/8/12 21:42
  * Description:
  */
+@Slf4j
 @Controller
 public class AdminController {
 
@@ -97,6 +101,18 @@ public class AdminController {
     @GetMapping("/admin/personal")
     public String personal(){
         return "admin/personal";
+    }
+
+    @PostMapping("/admin/image")
+    @ResponseBody
+    public Map imageUpload(@RequestParam("editormd-image-file")MultipartFile file){
+        log.error(file.getName());
+        log.debug(String.valueOf(file.getSize()));
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("success",1);
+        map.put("url","/image/jpg/123456");
+        map.put("message","上传成功");
+        return map;
     }
 
 }

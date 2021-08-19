@@ -43,6 +43,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/","/dashboard.html","/**").permitAll()
+//                .antMatchers("/*.svg","/*.png","/*.js","/*.css","/*.gif","/*.ico","/*.woff").permitAll() // 在这里添加
                 .and()
                 .formLogin().loginPage("/login")
                 .usernameParameter("username")
