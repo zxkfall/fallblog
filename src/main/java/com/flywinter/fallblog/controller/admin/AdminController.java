@@ -1,16 +1,14 @@
 package com.flywinter.fallblog.controller.admin;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.flywinter.fallblog.entity.TArticle;
-import com.flywinter.fallblog.entity.TCategory;
-import com.flywinter.fallblog.entity.TImage;
-import com.flywinter.fallblog.entity.TTag;
-import com.flywinter.fallblog.mapper.TArticleMapper;
-import com.flywinter.fallblog.mapper.TCategoryMapper;
-import com.flywinter.fallblog.mapper.TTagMapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.flywinter.fallblog.entity.*;
+import com.flywinter.fallblog.mapper.*;
 import com.flywinter.fallblog.service.ITImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +71,7 @@ public class AdminController {
         return "admin/dashboard";
     }
 
+
     /**
      * @return
      * @description 发布文章页，发布文章
@@ -82,15 +81,56 @@ public class AdminController {
         List<TCategory> categories = categoryMapper.selectList(null);
         model.addAttribute("categories", categories);
         List<TTag> tTags = tagMapper.selectList(null);
-        model.addAttribute("tags",tTags);
+        model.addAttribute("tags", tTags);
         return "admin/publish";
     }
+
+    @Autowired
+    TUserMapper userMapper;
+
     @PostMapping("/admin/publish")
-    public String insertArticle(TArticle article,@RequestParam("test-editor-markdown-doc") String content) {
-        System.out.println(content);
-        System.out.println(article);
+    public String insertArticle(TArticle article, @RequestParam("test-editor-markdown-doc") String content) {
+        if (StringUtils.isBlank(content) || StringUtils.isBlank(article.getTitle()) || StringUtils.isBlank(article.getFirstImage())) {
+            return "admin/publish";
+        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        TUser tUser = userMapper.selectOne(Wrappers.<TUser>lambdaQuery().eq(TUser::getEmail, username));
+        article.setUserId(tUser.getId());
+        article.setContent(content);
+        article.setCreateTime(LocalDateTime.now());
+        article.setUpdateTime(LocalDateTime.now());
+        articleMapper.insert(article);
+        return "redirect:/admin/publish";
+
+    }
+
+    @PostMapping("/admin/publish/{id}")
+    public String updateArticle(@PathVariable("id") String id, TArticle article, @RequestParam("test-editor-markdown-doc") String content) {
+        if (StringUtils.isBlank(content) || StringUtils.isBlank(article.getTitle()) || StringUtils.isBlank(article.getFirstImage())) {
+            return "admin/publish";
+        }
+        TArticle updateArticle = articleMapper.selectById(id);
+        updateArticle.setUpdateTime(LocalDateTime.now());
+        updateArticle.setContent(content);
+        updateArticle.setDescription(article.getDescription());
+        updateArticle.setTags(article.getTags());
+        updateArticle.setCategoryId(article.getCategoryId());
+        updateArticle.setFirstImage(article.getFirstImage());
+        int i = articleMapper.updateById(updateArticle);
         return "redirect:/admin/publish";
     }
+    @GetMapping("/admin/article/{id}")
+    public String getArticle(@PathVariable("id") String id,Model model) {
+        TArticle getArticle = articleMapper.selectById(id);
+        model.addAttribute("getarticle",getArticle);
+        List<TCategory> categories = categoryMapper.selectList(null);
+        model.addAttribute("categories", categories);
+        List<TTag> tTags = tagMapper.selectList(null);
+        model.addAttribute("tags", tTags);
+        return "admin/publish";
+    }
+
     @Autowired
     TArticleMapper articleMapper;
 
@@ -99,14 +139,26 @@ public class AdminController {
      * @description 管理模块
      */
     @GetMapping("/admin/article")
-    public String article() {
-
+    public String article(Model model) {
+        List<TArticle> articles = articleMapper.selectList(null);
+        model.addAttribute("articles",articles);
         return "admin/article";
     }
 
+    @PostMapping("/admin/article/{id}")
+    public String deleteArticle(@PathVariable("id") String id,@RequestParam("isdelete") String del){
+        if (del.equals("delete")) {
+            int i = articleMapper.deleteById(id);
+        }
+        return "redirect:/admin/article";
+    }
 
+    @Autowired
+    TCommentMapper commentMapper;
     @GetMapping("/admin/comment")
-    public String comment() {
+    public String comment(Model model) {
+        List<TComment> comments = commentMapper.selectList(null);
+        model.addAttribute("comments",comments);
         return "admin/comment";
     }
 
@@ -188,12 +240,17 @@ public class AdminController {
     @GetMapping("/admin/tag")
     public String tags(Model model) {
         List<TTag> tTags = tagMapper.selectList(null);
-        model.addAttribute("tags",tTags);
+        model.addAttribute("tags", tTags);
         return "admin/tag";
     }
 
+    @Autowired
+    TImageMapper imageMapper;
     @GetMapping("/admin/images")
-    public String images() {
+    public String images(Model model) {
+        List<TImage> imageList = imageMapper.selectList(null);
+        log.debug(imageList.size()+"");
+        model.addAttribute("imagelist", imageList);
         return "admin/images";
     }
 
@@ -235,7 +292,11 @@ public class AdminController {
         imageService.downloadImage(imageName, response);
     }
 
-
+    @PostMapping("/admin/images/{id}")
+    public String deleteImage(@PathVariable("id") Long id) {
+        int i = imageMapper.deleteById(id);
+        return "redirect:/admin/images";
+    }
 //
 //    @RequestMapping(value = "/get",produces = MediaType.IMAGE_JPEG_VALUE)
 //    @ResponseBody

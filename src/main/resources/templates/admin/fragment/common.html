@@ -16,13 +16,13 @@
     <title>SB Admin 2 - Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link th:href="@{../vendors/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/vendors/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link th:href="@{../css/sb-admin-2.min.css}" rel="stylesheet">
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
 
 </head>
 <body>
@@ -75,7 +75,7 @@
                 <a th:class="${child} == 'article'?'collapse-item active':'collapse-item'" th:href="@{/admin/article}">文章</a>
                 <a th:class="${child} == 'comment'?'collapse-item active':'collapse-item'" th:href="@{/admin/comment}">评论</a>
                 <a th:class="${child} == 'category'?'collapse-item active':'collapse-item'" th:href="@{/admin/category}">分类</a>
-                <a th:class="${child} == 'tags'?'collapse-item active':'collapse-item'" th:href="@{/admin/tags}">标签</a>
+                <a th:class="${child} == 'tag'?'collapse-item active':'collapse-item'" th:href="@{/admin/tag}">标签</a>
                 <a th:class="${child} == 'images'?'collapse-item active':'collapse-item'" th:href="@{/admin/images}">图片</a>
             </div>
         </div>
@@ -121,7 +121,7 @@
 
     <!-- Sidebar Message -->
     <div class="sidebar-card d-none d-lg-flex">
-        <img class="sidebar-card-illustration mb-2" th:src="@{../img/undraw_rocket.svg}" alt="...">
+        <img class="sidebar-card-illustration mb-2" th:src="@{/img/undraw_rocket.svg}" alt="...">
 <!--        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>-->
 <!--        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>-->
     </div>
@@ -246,7 +246,7 @@
                 </h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" th:src="@{../img/undraw_profile_1.svg}"
+                        <img class="rounded-circle" th:src="@{/img/undraw_profile_1.svg}"
                              alt="...">
                         <div class="status-indicator bg-success"></div>
                     </div>
@@ -258,7 +258,7 @@
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" th:src="@{../img/undraw_profile_2.svg}"
+                        <img class="rounded-circle" th:src="@{/img/undraw_profile_2.svg}"
                              alt="...">
                         <div class="status-indicator"></div>
                     </div>
@@ -270,7 +270,7 @@
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" th:src="@{../img/undraw_profile_3.svg}"
+                        <img class="rounded-circle" th:src="@{/img/undraw_profile_3.svg}"
                              alt="...">
                         <div class="status-indicator bg-warning"></div>
                     </div>
@@ -302,9 +302,9 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${#authentication.name}">Douglas McGee</span>
                 <img class="img-profile rounded-circle"
-                     th:src="@{../img/undraw_profile.svg}">
+                     th:src="@{/img/undraw_profile.svg}">
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

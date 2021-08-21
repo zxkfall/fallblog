@@ -30,12 +30,12 @@
                     <img th:src="@{../img/search.svg}" alt="search">
                 </a>
             </li>
-            <li class="nav-item nav-item-cart">
-                <a class="nav-link" href="#!">
-                    <span class="cart-item-count">0</span>
-                    <img th:src="@{../img/shopping-cart.svg}" alt="cart">
-                </a>
-            </li>
+<!--            <li class="nav-item nav-item-cart">-->
+<!--                <a class="nav-link" href="#!">-->
+<!--                    <span class="cart-item-count">0</span>-->
+<!--                    <img th:src="@{../img/shopping-cart.svg}" alt="cart">-->
+<!--                </a>-->
+<!--            </li>-->
             <li class="nav-item dropdown d-none d-sm-block">
                 <a class="nav-link dropdown-toggle" href="#!" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ENG</a>
                 <div class="dropdown-menu" aria-labelledby="languageDropdown">
@@ -75,12 +75,12 @@
                         <img th:src="@{../img/search.svg}" alt="search">
                     </a>
                 </li>
-                <li class="nav-item nav-item-cart">
-                    <a class="nav-link nav-link-btn" href="#!">
-                        <span class="cart-item-count">0</span>
-                        <img th:src="@{../img/shopping-cart.svg}" alt="cart">
-                    </a>
-                </li>
+<!--                <li class="nav-item nav-item-cart">-->
+<!--                    <a class="nav-link nav-link-btn" href="#!">-->
+<!--                        <span class="cart-item-count">0</span>-->
+<!--                        <img th:src="@{../img/shopping-cart.svg}" alt="cart">-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle " href="#!" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ENG</a>
                     <div class="dropdown-menu" aria-labelledby="languageDropdown">
@@ -97,6 +97,113 @@
         </div>
     </nav>
 </header>
+
+
+<footer th:fragment="footer" class="oleez-footer wow fadeInUp">
+    <div class="container">
+        <div class="footer-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <img th:src="@{../img/Logo_1.svg}" alt="oleez" class="footer-logo">
+                    <p class="footer-intro-text">We just need to believe that the future belongs to us!</p>
+                    <nav class="footer-social-links">
+                        <a href="https://connect.facebook.com/">Fb</a>
+                        <a href="https://www.facebook.com/TwitterInc/">Tw</a>
+                        <a href="https://www.instagram.com/">In</a>
+                        <a href="https://www.zhihu.com/">ZH</a>
+                    </nav>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 footer-widget-text">
+                            <h6 class="widget-title">Email</h6>
+                            <p class="widget-content">zxkfall@foxmail.com</p>
+                        </div>
+                        <div class="col-md-6 footer-widget-text">
+                            <h6 class="widget-title">ZhiHu</h6>
+                            <p class="widget-content"><a style="color:wheat" href="https://www.zhihu.com/people/luo-xie-zhi-qiu-36-61" target="_blank">落叶知秋</a></p>
+                        </div>
+                        <div class="col-md-6 footer-widget-text">
+                            <h6 class="widget-title">Views</h6>
+                            <p class="widget-content">111</p>
+                        </div>
+                        <div class="col-md-6 footer-widget-text">
+                            <h6 class="widget-title">Run Time</h6>
+                            <p class="widget-content" id="run_time" style="color: wheat"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-text">
+            <p class="mb-md-0">©  2021. Made with passion by <a href="https://www.flyinter.com" target="_blank" rel="noopener noreferrer" class="text-reset">zxkfall</a>.</p>
+            <p class="mb-0">All right reserved.</p>
+        </div>
+    </div>
+</footer>
+<!-- Modals -->
+<!-- Off canvas social menu -->
+<nav th:fragment="sider" id="offCanvasMenu" class="off-canvas-menu">
+    <button type="button" class="close" aria-label="Close" data-dismiss="offCanvasMenu">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <ul class="oleez-social-menu">
+        <li>
+            <a href="#!" class="oleez-social-menu-link">Facebook</a>
+        </li>
+        <li>
+            <a href="#!" class="oleez-social-menu-link">Instagram</a>
+        </li>
+        <li>
+            <a href="#!" class="oleez-social-menu-link">Behance</a>
+        </li>
+        <li>
+            <a href="#!" class="oleez-social-menu-link">Dribbble</a>
+        </li>
+        <li>
+            <a href="#!" class="oleez-social-menu-link">Email</a>
+        </li>
+    </ul>
+</nav>
+<!-- Full screen search box -->
+<div th:fragment="search" id="searchModal" class="search-modal">
+    <button type="button" class="close" aria-label="Close" data-dismiss="searchModal">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <form action="index.html" method="get" class="oleez-overlay-search-form">
+        <label for="search" class="sr-only">Search</label>
+        <input type="search" class="oleez-overlay-search-input" id="search" name="search" placeholder="Search here">
+    </form>
+</div>
+
+<script th:fragment="runTime" type="text/javascript">
+    new WOW().init();
+    function runTime() {
+        let d = new Date(), str = '';
+        let BirthDay = new Date("August 21,2021");
+        let today = new Date();
+        let timeold = (today.getTime() - BirthDay.getTime());
+        let sectimeold = timeold / 1000
+        let secondsold = Math.floor(sectimeold);
+        let msPerDay = 24 * 60 * 60 * 1000
+        let msPerYear = 365 * 24 * 60 * 60 * 1000
+        let e_daysold = timeold / msPerDay
+        let e_yearsold = timeold / msPerYear
+        let daysold = Math.floor(e_daysold);
+        let yearsold = Math.floor(e_yearsold);
+        //str = yearsold + "年";
+        str += daysold + "天";
+        str += d.getHours() + '时';
+        str += d.getMinutes() + '分';
+        str += d.getSeconds() + '秒';
+        return str;
+    }
+
+    setInterval(function () {
+        $('#run_time').html(runTime())
+    }, 1000);
+</script>
+
 
 </body>
 </html>

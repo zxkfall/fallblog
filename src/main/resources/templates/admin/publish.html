@@ -2,22 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{admin/fragment/common::head(Publish)}">
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SB Admin 2 - Blank</title>
-
-
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
-    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">-->
-
-
 </head>
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/a11y-dark.min.css"/>
@@ -53,41 +37,37 @@
             <div class="container-fluid">
 
                 <h1 class="h3 mb-4 text-gray-800">Publish</h1>
-                <form method="post" th:action="@{/admin/publish}">
-
-
+                <form method="post" th:action="@{/admin/publish{id}(id =${getarticle == null?'':'/'+getarticle.id})}">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="title">标题</span>
                         </div>
-                        <input name="title" type="text" class="form-control" placeholder="Title">
+                        <input th:value="${getarticle ==null?'':getarticle.title}" name="title" type="text" class="form-control" placeholder="Title">
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="description">描述</span>
                         </div>
-                        <input name="description" type="text" class="form-control" placeholder="Description">
+                        <input th:value="${getarticle==null?'':getarticle.description}" name="description" type="text" class="form-control" placeholder="Description">
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="category">分类</label>
                         </div>
-                        <select name="categoryId" class="custom-select" id="category">
+                        <select  name="categoryId" class="custom-select" id="category">
                             <option th:each="category,it : ${categories}" th:value="${category.id}"
-                                    th:text="${category.name}" th:selected="${it.index==0?true:false}"></option>
-
+                                    th:text="${category.name}" th:selected="${getarticle==null?it.index==0?true:false:category.id == getarticle.categoryId?true:false}"></option>
                         </select>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01">标签</label>
                         </div>
-                        <select name="tags" id="inputGroupSelect01" class="selectpicker show-tick form-control"
+                        <select name="tags" th:value="${getarticle==null?'':getarticle.tags}" id="inputGroupSelect01" class="selectpicker show-tick form-control"
                                 data-max-options="3" multiple data-live-search="false">
-                            <option th:each="tag,it : ${tags}" th:text="${tag.name}"></option>
-
+                            <option th:each="tag,it : ${tags}" th:text="${tag.name}" th:selected="${getarticle==null?false:getarticle.tags==tag.name}"></option>
                         </select>
 
                     </div>
@@ -98,14 +78,15 @@
                         </div>
                         <div class="custom-file">
                             <input  accept="image/*" onchange="
-                        console.log(this.value);
-                        document.getElementById('fileLab').textContent = this.value
-                        let fileEle = this;
-                        let imgEle = document.getElementById('imageID');
-                        let file1 = this.files[0];
-                        let url1 = window.URL.createObjectURL(file1);
-                        imgEle.src = url1;
+                        // console.log(this.value);
+                        // document.getElementById('fileLab').textContent = this.value
+                        // let fileEle = this;
+                        // let imgEle = document.getElementById('imageID');
+                        // let file1 = this.files[0];
+                        // let url1 = window.URL.createObjectURL(file1);
+                        // imgEle.src = url1;
                             " name="editormd-image-file" type="file" class="custom-file-input" id="inputGroupFile02">
+                            <input th:value="${getarticle==null?'':getarticle.firstImage}" id="imageUrl" name="firstImage" type="text" hidden>
                             <label id="fileLab" class="custom-file-label" for="inputGroupFile02"
                                    aria-describedby="inputGroupFileAddon02">Choose file</label>
                         </div>
@@ -114,14 +95,14 @@
                                   onclick="uploadImage()">Upload</span>
                         </div>
                     </div>
-                    <img id="imageID" src="" class="img-fluid" alt="...">
+                    <img id="imageID" th:src="@{${getarticle==null?'':getarticle.firstImage}}" class="img-fluid" alt="..." th:style="${getarticle == null?'visibility: hidden':'visibility: visible'}">
                     <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 
                     <script type="text/javascript">
 
 
                         function uploadImage() {
-                            let im = document.getElementById('imageID')
+                            let preImage = document.getElementById('imageID')
                             let file = document.getElementById('inputGroupFile02')
                             let token = $("meta[name='_csrf']").attr("content")
                             let header = $("meta[name='_csrf_header']").attr("content")
@@ -143,8 +124,11 @@
                                     // console.log(textStatus);
                                     // console.log(jqXHR);
                                     if (data.success === 1) { // 上传成功
-                                        im.src = window.location.origin + data.url; // 设置图片地址
-                                        document.getElementById('fileLab').textContent = data.url
+                                        preImage.style.visibility = 'visible'
+                                        preImage.src = window.location.origin + data.url; // 设置图片地址
+                                        // document.getElementById('fileLab').textContent = data.url
+                                        document.getElementById('imageUrl').value = data.url
+
                                     } else {
                                         alert(data.message); // 上传失败，弹出警告信息
                                     }
@@ -170,10 +154,12 @@
                     <!--            </div>-->
 
 
-                    <link rel="stylesheet" th:href="@{../css/editormd.css}"/>
+                    <link rel="stylesheet" th:href="@{/css/editormd.css}"/>
                     <div id="test-editor">
                         <label>
-                            <textarea name="content" style="display:none;"></textarea>
+<!--                            <textarea name="content" style="display:none;"></textarea>-->
+                            <textarea style="display:none;"></textarea>
+
                         </label>
                     </div>
 
@@ -221,14 +207,14 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script th:src="@{../vendors/jquery/jquery.min.js}"></script>
-    <script th:src="@{../vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/vendors/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script th:src="@{../vendors/jquery-easing/jquery.easing.min.js}"></script>
+    <script th:src="@{/vendors/jquery-easing/jquery.easing.min.js}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script th:src="@{../js/sb-admin-2.min.js}"></script>
+    <script th:src="@{/js/sb-admin-2.min.js}"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
@@ -245,7 +231,12 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/mermaid/8.11.2/mermaid.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script th:src="@{../js/editormd.js}"></script>
+    <script th:src="@{/js/editormd.js}"></script>
+
+    <script th:inline="javascript">
+        let mycontent = [[${getarticle ==null?'':getarticle.content}]];
+    </script>
+
     <script type="text/javascript">
         $(function () {
             // let editor = editormd("test-editor", {
@@ -255,16 +246,17 @@
             // });
             let editor = editormd("test-editor", { //注意1：这里的就是上面的DIV的id属性值
                 placeholder: '欢迎使用博客',
+                value:mycontent,
                 // width : "90%",
                 height: 400,
                 syncScrolling: "single",
                 emoji: true,
-                path: "../lib/", //注意2：你的路径
+                path: "/lib/", //注意2：你的路径
                 saveHTMLToTextarea: true,
                 tocm: true, // Using [TOCM]
                 tex: true, // 开启科学公式TeX语言支持，默认关闭
                 flowChart: true, // 开启流程图支持，默认关闭
-                pluginPath: '../plugin/',
+                pluginPath: '/plugin/',
                 /* 上传图片配置 */
                 imageUpload: true,
                 imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp", "jpeg"],
@@ -274,15 +266,15 @@
         });
     </script>
     <script type="text/javascript">
-        mermaid.initialize({startOnLoad: true});
-        hljs.highlightAll();
-        const mermaidChart = (code) => {
-            try {
-                return `<div class="mermaid">${code}</div>`
-            } catch ({str, hash}) {
-                return `<pre>${str}</pre>`
-            }
-        }
+        // mermaid.initialize({startOnLoad: true});
+        // hljs.highlightAll();
+        // const mermaidChart = (code) => {
+        //     try {
+        //         return `<div class="mermaid">${code}</div>`
+        //     } catch ({str, hash}) {
+        //         return `<pre>${str}</pre>`
+        //     }
+        // }
         // let md = window.markdownit({
         //     highlight: function (str, lang) {
         //         mermaid.initialize({startOnLoad:true});

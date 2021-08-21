@@ -1,5 +1,6 @@
 package com.flywinter.fallblog.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -41,7 +42,8 @@ public class TComment extends Model<TComment> {
      */
     private Integer status;
 
-    private Long version;
+    @Version
+    private Long version = 1L;
 
     private LocalDateTime createTime;
 

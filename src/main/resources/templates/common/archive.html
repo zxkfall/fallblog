@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragment/header::head(Archive)}">
     <meta charset="UTF-8">
@@ -13,139 +13,66 @@
 </head>
 
 <body>
-    <div class="oleez-loader"></div>
-    <div th:replace="~{fragment/header::header(archive)}"></div>
+<div class="oleez-loader"></div>
+<div th:replace="~{fragment/header::header(archive)}"></div>
 
-    <main class="portfolio-list">
-        <div class="container">
-            <h1 class="oleez-page-title wow fadeInUp">Archive</h1>
-            <article class="project">
-                <div class="row">
-                    <div class="col-md-4 mb-5 md-mb-0 project-content wow fadeInLeft">
-                        <h2 class="project-title">Simple Design Showcase</h2>
-                        <a href="#!" class="project-link">view project</a>
-                    </div>
-                    <div class="col-md-7 mb-5">
-                        <div class="project-thumbnail-wrapper wow fadeInRight">
-                            <img th:src="@{../img/Project_12x.jpg}" alt="project">
-                        </div>
-                    </div>
+<main class="portfolio-list">
+    <div class="container">
+        <h1 class="oleez-page-title wow fadeInUp">Archive</h1>
+        <article class="project" th:each="article:${articles}">
+            <div class="row">
+                <div class="col-md-4 mb-5 md-mb-0 project-content wow fadeInLeft">
+                    <h2 class="project-title" th:text="${article.title}">Simple Design Showcase</h2>
+                    <a th:href="@{/article/{id}(id=${article.id})}" class="project-link">view project</a>
                 </div>
-            </article>
-            <article class="project">
-                <div class="row">
-                    <div class="col-md-4 mb-5 md-mb-0 project-content wow fadeInLeft">
-                        <h2 class="project-title">Simple Design Showcase</h2>
-                        <a href="#!" class="project-link">view project</a>
-                    </div>
-                    <div class="col-md-7 wow fadeInRight">
-                        <div class="project-thumbnail-wrapper">
-                            <img th:src="@{../img/Project_22x.jpg}" alt="project">
-                        </div>
-                    </div>
-                </div>
-            </article>
-            <article class="project">
-                <div class="row">
-                    <div class="col-md-4 mb-5 md-mb-0 project-content wow fadeInLeft">
-                        <h2 class="project-title">Simple Design Showcase</h2>
-                        <a href="#!" class="project-link">view project</a>
-                    </div>
-                    <div class="col-md-7 wow fadeInRight">
-                        <div class="project-thumbnail-wrapper">
-                            <img th:src="@{../img/Project_32x.jpg}" alt="project">
-                        </div>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </main>
-    
-    <footer class="oleez-footer wow fadeInUp">
-        <div class="container">
-            <div class="footer-content">
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="../../static/img/Logo_1.svg" alt="oleez" class="footer-logo">
-                        <p class="footer-intro-text">Don't be shy, get in touch with us and create the world again!</p>
-                        <nav class="footer-social-links">
-                            <a href="#!">Fb</a>
-                            <a href="#!">Tw</a>
-                            <a href="#!">In</a>
-                            <a href="#!">Be</a>
-                        </nav>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-6 footer-widget-text">
-                                <h6 class="widget-title">PHONE</h6>
-                                <p class="widget-content">+80 (0)5 12 34 95 89</p>
-                            </div>
-                            <div class="col-md-6 footer-widget-text">
-                                <h6 class="widget-title">ENQUIRUES</h6>
-                                <p class="widget-content">info@oleez.site</p>
-                            </div>
-                            <div class="col-md-6 footer-widget-text">
-                                <h6 class="widget-title">ADDRESS</h6>
-                                <p class="widget-content">33 rue Burdeau 69089 <br> Paris France</p>
-                            </div>
-                            <div class="col-md-6 footer-widget-text">
-                                <h6 class="widget-title">WORK HOURS</h6>
-                                <p class="widget-content">Weekdays: 09:00 - 18:00 <br> Weekends: 11:00 - 17:00</p>
-                            </div>
-                        </div>
+                <div class="col-md-7 mb-5">
+                    <div class="project-thumbnail-wrapper wow fadeInRight">
+                        <img th:src="@{${article.firstImage}}" alt="project">
                     </div>
                 </div>
             </div>
-            <div class="footer-text">
-                <p class="mb-md-0">©  2020, oleez Theme. Made with passion by <a href="https://www.bootstrapdash.com" target="_blank" rel="noopener noreferrer" class="text-reset">BootstrapDash</a>.</p>
-                <p class="mb-0">All right reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Modals -->
-    <!-- Off canvas social menu -->
-    <nav id="offCanvasMenu" class="off-canvas-menu">
-        <button type="button" class="close" aria-label="Close" data-dismiss="offCanvasMenu">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <ul class="oleez-social-menu">
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Facebook</a>
-            </li>
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Instagram</a>
-            </li>
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Behance</a>
-            </li>
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Dribbble</a>
-            </li>
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Email</a>
-            </li>
-        </ul>
-    </nav>
-    <!-- Full screen search box -->
-    <div id="searchModal" class="search-modal">
-        <button type="button" class="close" aria-label="Close" data-dismiss="searchModal">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <form action="index.html" method="get" class="oleez-overlay-search-form">
-            <label for="search" class="sr-only">Search</label>
-            <input type="search" class="oleez-overlay-search-input" id="search" name="search" placeholder="Search here">
-        </form>
+        </article>
     </div>
-    <script th:src="@{../vendors/popper.js/popper.min.js}"></script>
-    <script th:src="@{../vendors/wowjs/wow.min.js}"></script>
-    <script th:src="@{../vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
-    <script th:src="@{../vendors/fancybox/jquery.fancybox.min.js}"></script>
-    <script th:src="@{../js/main.js}"></script>
-    <script>
-        new WOW().init();
-    </script>
+</main>
+
+<footer th:replace="~{fragment/header::footer}" class="oleez-footer"></footer>
+<nav th:replace="~{fragment/header::sider}" class="oleez-footer"></nav>
+<div th:replace="~{fragment/header::search}" class="oleez-footer"></div>
+
+
+<script th:src="@{../vendors/popper.js/popper.min.js}"></script>
+<script th:src="@{../vendors/wowjs/wow.min.js}"></script>
+<script th:src="@{../vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{../vendors/fancybox/jquery.fancybox.min.js}"></script>
+<script th:src="@{../js/main.js}"></script>
+<script th:replace="~{fragment/header::runTime}">
+    new WOW().init();
+    function runTime() {
+        let d = new Date(), str = '';
+        let BirthDay = new Date("August 21,2021");
+        let today = new Date();
+        let timeold = (today.getTime() - BirthDay.getTime());
+        let sectimeold = timeold / 1000
+        let secondsold = Math.floor(sectimeold);
+        let msPerDay = 24 * 60 * 60 * 1000
+        let msPerYear = 365 * 24 * 60 * 60 * 1000
+        let e_daysold = timeold / msPerDay
+        let e_yearsold = timeold / msPerYear
+        let daysold = Math.floor(e_daysold);
+        let yearsold = Math.floor(e_yearsold);
+        //str = yearsold + "年";
+        str += daysold + "天";
+        str += d.getHours() + '时';
+        str += d.getMinutes() + '分';
+        str += d.getSeconds() + '秒';
+        return str;
+    }
+
+    setInterval(function () {
+        $('#run_time').html(runTime())
+    }, 1000);
+
+</script>
 </body>
 
 </html>

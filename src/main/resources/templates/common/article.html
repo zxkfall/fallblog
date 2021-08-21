@@ -12,235 +12,196 @@
     <script src="../../static/vendors/jquery/jquery.min.js"></script>
     <script src="../../static/js/loader.js"></script>
 </head>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/a11y-dark.min.css"/>
 
+</head>
 <body>
-    <div class="oleez-loader"></div>
-    <header th:replace="~{fragment/header::header(about)}">    </header>
+<div class="oleez-loader"></div>
+<header th:replace="~{fragment/header::header(index)}"></header>
 
-    <main class="blog-post-single">
-        <div class="container">
-            <h1 class="post-title wow fadeInUp">Article</h1>
-            <div class="row">
-                <div class="col-md-8 blog-post-wrapper">
-                    <div class="post-header wow fadeInUp">
-                        <img th:src="@{../img/Blog_single/Blog_single2x.jpg}" alt="blog post" class="post-featured-image">
-                        <p class="post-date">January 29, 2020</p>
-                    </div>
-                    <div class="post-content wow fadeInUp">
-                        <h4>Why you must experience design at least once</h4>
-                        <p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum.</p>
-                        <p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum.</p>
-                        <blockquote class="blockquote wow fadeInUp">
-                            <p>It’s safe to say that because of my unique professional experiences, I’ve tested out a lot of headphones.</p>
-                        </blockquote>
-                        <h5>The High-Quality Architecture Solutions from a Silicon Valley.</h5>
-                        <p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum.</p>
-                        <h5>Outdoor Work: a Designer’s Checklist for Every UX Project.</h5>
-                        <p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum.</p>
-                    </div>
-                    <div class="post-tags wow fadeInUp">
-                        <a href="#!" class="post-tag">Design Studio</a>
-                        <a href="#!" class="post-tag">Creative Design</a>
-                    </div>
-                    <div class="post-navigation wow fadeInUp">
-                        <button class="btn prev-post"> Prev Post</button>
-                        <button class="btn next-post"> Next Post</button>
-                    </div>
-                    <div class="comment-section wow fadeInUp">
-                        <h5 class="section-title">Leave a Reply</h5>
-                        <form action="POST" class="oleez-comment-form">
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <input type="text" class="oleez-input" id="fullName" name="fullName" required>
-                                    <label for="fullName">*Full name</label>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <input type="email" class="oleez-input" id="fullName" name="email" required>
-                                    <label for="email">*Email</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-12">
-                                    <label for="message">*Message</label>
-                                    <textarea name="message" id="message" rows="10" class="oleez-textarea" required></textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-submit">Send</button>
-                                </div>
-                            </div>
-                        </form>
+<main class="blog-post-single">
+    <div class="container">
+        <h1 class="post-title wow fadeInUp" th:text="${article.title}">Article</h1>
+        <div class="row">
+            <div class="col-md-8 blog-post-wrapper">
+                <div class="post-header wow fadeInUp">
+                    <img th:src="@{${article.firstImage}}" alt="blog post" class="post-featured-image">
+                    <p class="post-date" th:text="${#temporals.format(article.createTime,'MM dd,yyyy')}">January 29,
+                        2020</p>
+                </div>
+                <div id="article_content" th:text="${article.content}" class="post-content wow fadeInUp">
+
+                </div>
+                <div class="post-tags wow fadeInUp">
+                    <a th:each="ttag: ${article.tags.split(',')}" href="#!" class="post-tag" th:text="${ttag}">Design
+                        Studio</a>
+                </div>
+                <div class="post-navigation wow fadeInUp">
+                    <button class="btn prev-post"> Prev Post</button>
+                    <button class="btn next-post"> Next Post</button>
+                </div>
+
+                <div class="media wow fadeInUp" th:each="comment : ${comments}">
+                    <img  th:src="@{/img/Bloggrid/Bloggrid_1.jpg}" class="mr-3 rounded-circle" height="48" width="48" th:alt="${comment.email}">
+                    <div class="media-body">
+                        <h5 class="mt-0" th:text="${comment.nickname}">Media heading</h5>
+                        <p th:text="${comment.content}">Will you do the same for me? It's time to face the music I'm no longer your muse. Heard it's beautiful, be the judge and my girls gonna take a vote. I can feel a phoenix inside of me. Heaven is jealous of our love, angels are crying from up above. Yeah, you take me to utopia.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="sidebar-widget wow fadeInUp">
-                        <h5 class="widget-title">Tags</h5>
-                        <div class="widget-content">
-                            <a href="#!" class="post-tag">Design Studio</a>
-                            <a href="#!" class="post-tag">Creative Design</a>
-                            <a href="#!" class="post-tag">Marketing</a>
-                            <a href="#!" class="post-tag">Typography</a>
-                            <a href="#!" class="post-tag">Team</a>
-                            <a href="#!" class="post-tag">Project</a>
-                        </div>
-                    </div>
-                    <div class="sidebar-widget wow fadeInUp">
-                        <h5 class="widget-title">Share</h5>
-                        <div class="widget-content">
-                            <nav class="social-links">
-                                <a href="#!">Fb</a>
-                                <a href="#!">Tw</a>
-                                <a href="#!">In</a>
-                                <a href="#!">Be</a>
-                            </nav>
-                        </div>
-                    </div>
-                    <div class="sidebar-widget wow fadeInUp">
-                        <h5 class="widget-title">Gallery</h5>
-                        <div class="widget-content">
-                            <div class="gallery">
-                                <a th:href="@{../img/Blogstandard/Blogstandard_2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a th:href="@{../img/Blogstandard/Blogstandard_2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a th:href="@{../img/Blogstandard/Blogstandard_2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a th:href="@{../img/Blogstandard/Blogstandard_2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a th:href="@{../img/Blogstandard/Blogstandard_2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a th:href="@{../img/Blogstandard/Blogstandard_2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a th:href="@{../img/Blogstandard/Blogstandard_2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a th:href="@{../img/Blogstandard/Blogstandard_2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a href="../../static/img/Blogstandard/Blogstandard_@2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a href="../../static/img/Blogstandard/Blogstandard_@2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a href="../../static/img/Blogstandard/Blogstandard_@2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
-                                <a href="../../static/img/Blogstandard/Blogstandard_@2x.jpg}" class="gallery-grid-item" data-fancybox="widget-gallery">
-                                    <img th:src="@{../img/Blogstandard/Blogstandard_2x.jpg}"  alt="gallery item">
-                                </a>
+
+                <div class="comment-section wow fadeInUp">
+                    <h5 class="section-title">Leave a Reply</h5>
+                    <form th:action="@{/comment}" class="oleez-comment-form" method="post">
+                        <input type="hidden" th:name="${_csrf.headerName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="articleId" th:value="${article.id}">
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <input type="text" class="oleez-input" id="nickname" name="nickname" required>
+                                <label for="nickname">*Nickname</label>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="email" class="oleez-input" id="email" name="email" required>
+                                <label for="email">*Email</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="sidebar-widget wow fadeInUp">
-                        <h5 class="widget-title">Categories</h5>
-                        <div class="widget-content">
-                            <ul class="category-list">
-                                <li><a href="#!">Animation</a></li>
-                                <li><a href="#!">Branding</a></li>
-                                <li><a href="#!">Graphic Design</a></li>
-                                <li><a href="#!">Photography</a></li>
-                                <li><a href="#!">Web Developing</a></li>
-                            </ul>
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <label for="message">*Message</label>
+                                <textarea name="content" id="message" rows="10" class="oleez-textarea"
+                                          required></textarea>
+                            </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-submit">Send</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
-    </main>
-    
-    <footer class="oleez-footer wow fadeInUp">
-        <div class="container">
-            <div class="footer-content">
-                <div class="row">
-                    <div class="col-md-6">
-                        <img th:src="@{../img/Logo_1.svg}" alt="oleez" class="footer-logo">
-                        <p class="footer-intro-text">Don't be shy, get in touch with us and create the world again!</p>
-                        <nav class="footer-social-links">
-                            <a href="#!">Fb</a>
-                            <a href="#!">Tw</a>
-                            <a href="#!">In</a>
-                            <a href="#!">Be</a>
+            <div class="col-md-4">
+                <div class="sidebar-widget wow fadeInUp">
+                    <h5 class="widget-title">Tags</h5>
+                    <div class="widget-content">
+                        <a th:each="tagg:${article.tags.split(',')}" href="#!" class="post-tag" th:text="${tagg}">Design Studio</a>
+                    </div>
+                </div>
+                <div class="sidebar-widget wow fadeInUp">
+                    <h5 class="widget-title">Category</h5>
+                    <div class="widget-content">
+                        <ul class="category-list">
+                            <li><a th:href="@{/category/{id}(id=${category.id})}" th:text="${category.name}">Animation</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="sidebar-widget wow fadeInUp">
+                    <h5 class="widget-title">Share</h5>
+                    <div class="widget-content">
+                        <nav class="social-links">
+                            <a href="https://connect.facebook.com/">Fb</a>
+                            <a href="https://www.facebook.com/TwitterInc/">Tw</a>
+                            <a href="https://www.instagram.com/">In</a>
+                            <a href="https://www.zhihu.com/">ZH</a>
                         </nav>
                     </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-6 footer-widget-text">
-                                <h6 class="widget-title">PHONE</h6>
-                                <p class="widget-content">+80 (0)5 12 34 95 89</p>
-                            </div>
-                            <div class="col-md-6 footer-widget-text">
-                                <h6 class="widget-title">ENQUIRUES</h6>
-                                <p class="widget-content">info@oleez.site</p>
-                            </div>
-                            <div class="col-md-6 footer-widget-text">
-                                <h6 class="widget-title">ADDRESS</h6>
-                                <p class="widget-content">33 rue Burdeau 69089 <br> Paris France</p>
-                            </div>
-                            <div class="col-md-6 footer-widget-text">
-                                <h6 class="widget-title">WORK HOURS</h6>
-                                <p class="widget-content">Weekdays: 09:00 - 18:00 <br> Weekends: 11:00 - 17:00</p>
-                            </div>
+                </div>
+                <div class="sidebar-widget wow fadeInUp">
+                    <h5 class="widget-title">Gallery</h5>
+                    <div class="widget-content">
+                        <div class="gallery">
+                            <a th:each="image :${imagelist}" th:href="@{/images/{name}(name=${image.name})}" class="gallery-grid-item"
+                               data-fancybox="widget-gallery">
+                                <img th:src="@{/images/{name}(name=${image.name})}" alt="gallery item">
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="footer-text">
-                <p class="mb-md-0">©  2020, oleez Theme. Made with passion by <a href="https://www.bootstrapdash.com" target="_blank" rel="noopener noreferrer" class="text-reset">BootstrapDash</a>.</p>
-                <p class="mb-0">All right reserved.</p>
+
             </div>
         </div>
-    </footer>
-
-    <!-- Modals -->
-    <!-- Off canvas social menu -->
-    <nav id="offCanvasMenu" class="off-canvas-menu">
-        <button type="button" class="close" aria-label="Close" data-dismiss="offCanvasMenu">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <ul class="oleez-social-menu">
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Facebook</a>
-            </li>
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Instagram</a>
-            </li>
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Behance</a>
-            </li>
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Dribbble</a>
-            </li>
-            <li>
-                <a href="#!" class="oleez-social-menu-link">Email</a>
-            </li>
-        </ul>
-    </nav>
-    <!-- Full screen search box -->
-    <div id="searchModal" class="search-modal">
-        <button type="button" class="close" aria-label="Close" data-dismiss="searchModal">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <form action="index.html" method="get" class="oleez-overlay-search-form">
-            <label for="search" class="sr-only">Search</label>
-            <input type="search" class="oleez-overlay-search-input" id="search" name="search" placeholder="Search here">
-        </form>
     </div>
-    <script th:src="@{../vendors/popper.js/popper.min.js}"></script>
-    <script th:src="@{../vendors/wowjs/wow.min.js}"></script>
-    <script th:src="@{../vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
-    <script th:src="@{../vendors/fancybox/jquery.fancybox.min.js}"></script>
-    <script th:src="@{../js/main.js}"></script>
-    <script>
-        new WOW().init();
-    </script>
+</main>
+
+<footer th:replace="~{fragment/header::footer}" class="oleez-footer"></footer>
+<nav th:replace="~{fragment/header::sider}" class="oleez-footer"></nav>
+<div th:replace="~{fragment/header::search}" class="oleez-footer"></div>
+
+
+<script th:src="@{../vendors/popper.js/popper.min.js}"></script>
+<script th:src="@{../vendors/wowjs/wow.min.js}"></script>
+<script th:src="@{../vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{../vendors/fancybox/jquery.fancybox.min.js}"></script>
+<script th:src="@{../js/main.js}"></script>
+<script>
+    new WOW().init();
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/mermaid/8.11.2/mermaid.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<!--    Markdown-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.2.0/markdown-it.min.js"
+        integrity="sha512-cTQeM/op796Fp1ZUxfech8gSMLT/HvrXMkRGdGZGQnbwuq/obG0UtcL04eByVa99qJik7WlnlQOr5/Fw5B36aw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script th:replace="~{fragment/header::runTime}"></script>
+
+<script th:inline="javascript">
+    let mycontent = [[${article ==null?'':article.content}]];
+</script>
+<script type="text/javascript">
+    mermaid.initialize({
+        startOnLoad:true
+    });
+    hljs.highlightAll();
+    const mermaidChart = (code) => {
+        try {
+            return `<div class="mermaid">${code}</div>`
+        } catch ({str, hash}) {
+            return `<pre>${str}</pre>`
+        }
+    }
+
+    let md = window.markdownit({
+        highlight: function (str, lang) {
+            // mermaid.initialize({
+            //     maxTextSize: 99999999 ,
+            //     startOnLoad: true
+            // });
+            let esc = md.utils.escapeHtml;
+            console.log(lang)
+            console.log(str)
+            if (lang && hljs.getLanguage(lang)) {
+                try {
+                    // return hljs.highlight(lang, str, true).value;
+                    return '<pre class="hljs"><code>' + hljs.highlight(lang, str, true).value + '</code></pre>';
+                } catch (__) {
+                }
+            } else if (lang === 'mermaid') {
+                // return mermaidChart(str)
+                let length = str.length;
+                console.log(length)
+                // return '<pre class="mermaid">' + mermaid.mermaidAPI.render('mermaid', str) + '</pre>';
+                // return '<pre class="mermaid">' + mermaid.mermaidAPI.render('mermaid', str) + '</pre>';
+                return  mermaid.mermaidAPI.render('mermaid', str) ;
+
+            } else {
+                return '<pre class="hljs"><code>' + esc(str) + '</code></pre>';
+            }
+            return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+        },
+        html: true,
+        linkify: true,
+        typographer: true,
+    }).enable('image').enable(['link']);
+    // let result = md.render(mycontent)
+    let textContent = document.getElementById("article_content").textContent;
+    let result = md.render(textContent)
+    document.getElementById("article_content").innerHTML = result;
+
+
+
+</script>
 </body>
 
 
