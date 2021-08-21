@@ -1,6 +1,9 @@
 package com.flywinter.fallblog.controller.common;
 
+import com.flywinter.fallblog.entity.TArticle;
+import com.flywinter.fallblog.mapper.TArticleMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Slf4j
 @Controller
 public class BlogController {
+    @Autowired
+    TArticleMapper tArticleMapper;
+
     @GetMapping("/")
     public String index(Model model){
+        tArticleMapper.selectList(null);
         model.addAttribute("msg","Hello World!");
         return "index";
     }

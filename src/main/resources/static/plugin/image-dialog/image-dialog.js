@@ -201,7 +201,7 @@
                                 // console.log(textStatus);
                                 // console.log(jqXHR);
                                 if (data.success === 1) { // 上传成功
-                                    dialog.find("[data-url]").val(data.url); // 设置图片地址
+                                    dialog.find("[data-url]").val(window.location.origin+data.url); // 设置图片地址
                                 }
                                 else {
                                     alert(data.message); // 上传失败，弹出警告信息

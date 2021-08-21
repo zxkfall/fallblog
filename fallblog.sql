@@ -377,7 +377,7 @@ create table t_comment_stars
   character set = utf8;
 
 
-drop table if exists t_tags;
+drop table if exists t_tag;
 create table if not exists t_tags
 (
     id          bigint       not null auto_increment,
@@ -390,7 +390,7 @@ create table if not exists t_tags
 ) engine = INNODB
   character set = utf8;
 
-drop table if exists t_images;
+drop table if exists t_image;
 create table if not exists t_images
 (
     id          varchar(50) not null,

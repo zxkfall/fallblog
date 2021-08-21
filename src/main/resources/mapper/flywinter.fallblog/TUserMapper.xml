@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flywinter.fallblog.mapper.TUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.flywinter.fallblog.entity.TUser">
+        <id column="id" property="id" />
+        <result column="nickname" property="nickname" />
+        <result column="email" property="email" />
+        <result column="password" property="password" />
+        <result column="avatar" property="avatar" />
+        <result column="description" property="description" />
+        <result column="status" property="status" />
+        <result column="version" property="version" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, nickname, email, password, avatar, description, status, version, create_time, update_time
+    </sql>
+
+</mapper>

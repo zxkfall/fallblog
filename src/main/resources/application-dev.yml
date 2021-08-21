@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql://localhost:3306/fall_blog?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&serverTimezone=UTC
     username: root
     password: 123456
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      location: ../file
 
 
 #  配置文件接管了后这里就没用了

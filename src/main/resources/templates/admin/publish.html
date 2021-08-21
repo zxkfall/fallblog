@@ -15,12 +15,13 @@
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">-->
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">-->
 
 
 </head>
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/a11y-dark.min.css" />    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/a11y-dark.min.css"/>
+    <!-- Custom styles for this template-->
 
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
@@ -51,198 +52,275 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <!-- Page Heading -->
                 <h1 class="h3 mb-4 text-gray-800">Publish</h1>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">标题</span>
+                <form method="post" th:action="@{/admin/publish}">
+
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="title">标题</span>
+                        </div>
+                        <input name="title" type="text" class="form-control" placeholder="Title">
                     </div>
-                    <input type="text" class="form-control" placeholder="Title" aria-label="Username" aria-describedby="basic-addon1">
-                </div>
 
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">描述</span>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="description">描述</span>
+                        </div>
+                        <input name="description" type="text" class="form-control" placeholder="Description">
                     </div>
-                    <input type="text" class="form-control" placeholder="Description" aria-label="Username" aria-describedby="basic-addon1">
-                </div>
 
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">分类</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="category">分类</label>
+                        </div>
+                        <select name="categoryId" class="custom-select" id="category">
+                            <option th:each="category,it : ${categories}" th:value="${category.id}"
+                                    th:text="${category.name}" th:selected="${it.index==0?true:false}"></option>
+
+                        </select>
                     </div>
-                    <select class="custom-select" id="inputGroupSelect01">
-                        <option selected>Choose...</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">标签</label>
+                        </div>
+                        <select name="tags" id="inputGroupSelect01" class="selectpicker show-tick form-control"
+                                data-max-options="3" multiple data-live-search="false">
+                            <option th:each="tag,it : ${tags}" th:text="${tag.name}"></option>
 
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">封面</span>
+                        </select>
+
                     </div>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile02">
-                        <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">封面</span>
+                        </div>
+                        <div class="custom-file">
+                            <input  accept="image/*" onchange="
+                        console.log(this.value);
+                        document.getElementById('fileLab').textContent = this.value
+                        let fileEle = this;
+                        let imgEle = document.getElementById('imageID');
+                        let file1 = this.files[0];
+                        let url1 = window.URL.createObjectURL(file1);
+                        imgEle.src = url1;
+                            " name="editormd-image-file" type="file" class="custom-file-input" id="inputGroupFile02">
+                            <label id="fileLab" class="custom-file-label" for="inputGroupFile02"
+                                   aria-describedby="inputGroupFileAddon02">Choose file</label>
+                        </div>
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="inputGroupFileAddon02"
+                                  onclick="uploadImage()">Upload</span>
+                        </div>
                     </div>
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
+                    <img id="imageID" src="" class="img-fluid" alt="...">
+                    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+                    <script type="text/javascript">
+
+
+                        function uploadImage() {
+                            let im = document.getElementById('imageID')
+                            let file = document.getElementById('inputGroupFile02')
+                            let token = $("meta[name='_csrf']").attr("content")
+                            let header = $("meta[name='_csrf_header']").attr("content")
+                            let formData = new FormData();
+                            formData.append('editormd-image-file', file.files[0])
+                            $.ajax({
+                                type: 'post',
+                                // url: "http://localhost:8080/upload/test", // 你的服务器端的图片上传接口。如果你设置了 imageUploadURL，那么可以使用下面的方式
+                                url: window.location.origin + "/admin/image",
+                                // url: settings.imageUploadURL,
+                                // headers: {'Cookie' : document.cookie },
+                                headers: {[header]: token},
+                                data: formData,
+                                cache: false,
+                                processData: false,
+                                contentType: false,
+                                success: function (data, textStatus, jqXHR) {
+                                    // console.log(data);
+                                    // console.log(textStatus);
+                                    // console.log(jqXHR);
+                                    if (data.success === 1) { // 上传成功
+                                        im.src = window.location.origin + data.url; // 设置图片地址
+                                        document.getElementById('fileLab').textContent = data.url
+                                    } else {
+                                        alert(data.message); // 上传失败，弹出警告信息
+                                    }
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    // console.log(XMLHttpRequest);
+                                    // console.log(textStatus);
+                                    // console.log(errorThrown);
+                                }
+                            });
+                        }
+
+
+                    </script>
+                    <!--                &lt;!&ndash; -设置展示的div添加id &ndash;&gt;-->
+                    <!--                <div id="result"></div>-->
+                    <!--                &lt;!&ndash;                <div class="mermaid">&ndash;&gt;-->
+                    <!--                &lt;!&ndash;                    graph LR&ndash;&gt;-->
+                    <!--                &lt;!&ndash;                    A -&#45;&#45; B&ndash;&gt;-->
+                    <!--                &lt;!&ndash;                    B&ndash;&gt;C[fa:fa-ban forbidden]&ndash;&gt;-->
+                    <!--                &lt;!&ndash;                    B&ndash;&gt;D(fa:fa-spinner);&ndash;&gt;-->
+                    <!--                &lt;!&ndash;                </div>&ndash;&gt;-->
+                    <!--            </div>-->
+
+
+                    <link rel="stylesheet" th:href="@{../css/editormd.css}"/>
+                    <div id="test-editor">
+                        <label>
+                            <textarea name="content" style="display:none;"></textarea>
+                        </label>
                     </div>
-                </div>
 
 
+                    <input type="hidden" th:name="${_csrf.headerName}" th:value="${_csrf.token}">
 
-
-
-                <link rel="stylesheet" th:href="@{../css/editormd.css}" />
-                <div id="test-editor">
-    <textarea style="display:none;"></textarea>
-                </div>
-                <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-                <script th:src="@{../js/editormd.js}"></script>
-                <script type="text/javascript">
-                    $(function() {
-                        // let editor = editormd("test-editor", {
-                        //     // width  : "100%",
-                        //     // height : "100%",
-                        //     path   : "../lib/"
-                        // });
-                        let editor = editormd("test-editor", { //注意1：这里的就是上面的DIV的id属性值
-                            placeholder : '欢迎使用博客',
-                            // width : "90%",
-                            height : 400,
-                            syncScrolling : "single",
-                            emoji : true,
-                            path : "../lib/", //注意2：你的路径
-                            saveHTMLToTextarea : true,
-                            tocm : true, // Using [TOCM]
-                            tex : true, // 开启科学公式TeX语言支持，默认关闭
-                            flowChart : true, // 开启流程图支持，默认关闭
-                            pluginPath:'../plugin/',
-                            /* 上传图片配置 */
-                            imageUpload : true,
-                            imageFormats : [ "jpg", "jpeg", "gif", "png", "bmp", "webp","jpeg" ],
-                            imageUploadURL : "/admin/image", //注意你后端的上传图片服务地址
-                        })
-
-                    });
-
-                    // editor.startOnLoad
-                </script>
-
-
-
-                <!-- -设置展示的div添加id -->
-                <div id="result"></div>
-<!--                <div class="mermaid">-->
-<!--                    graph LR-->
-<!--                    A -&#45;&#45; B-->
-<!--                    B&ndash;&gt;C[fa:fa-ban forbidden]-->
-<!--                    B&ndash;&gt;D(fa:fa-spinner);-->
-<!--                </div>-->
+                    <!-- /.container-fluid -->
+                    <div class="row justify-content-between">
+                        <div class="col-4 mr-auto">
+                            <button type="button" class="btn btn-secondary">退出</button>
+                        </div>
+                        <div class="col-4 " style="max-width: fit-content;">
+                            <button type="button" class="btn btn-success">保存</button>
+                            <button type="submit" class="btn btn-primary">发布</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <!-- /.container-fluid -->
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
 
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
-                </div>
-            </div>
-        </footer>
-        <!-- End of Footer -->
+        <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Page Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
+    <!-- Logout Modal-->
+    <div th:replace="~{admin/fragment/common::logout}" class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel">
+    </div>
 
-<!-- Logout Modal-->
-<div th:replace="~{admin/fragment/common::logout}" class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalLabel">
-</div>
+    <!-- Bootstrap core JavaScript-->
+    <script th:src="@{../vendors/jquery/jquery.min.js}"></script>
+    <script th:src="@{../vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
 
-<!-- Bootstrap core JavaScript-->
-<script th:src="@{../vendors/jquery/jquery.min.js}"></script>
-<script th:src="@{../vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+    <!-- Core plugin JavaScript-->
+    <script th:src="@{../vendors/jquery-easing/jquery.easing.min.js}"></script>
 
-<!-- Core plugin JavaScript-->
-<script th:src="@{../vendors/jquery-easing/jquery.easing.min.js}"></script>
+    <!-- Custom scripts for all pages-->
+    <script th:src="@{../js/sb-admin-2.min.js}"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
-<!-- Custom scripts for all pages-->
-<script th:src="@{../js/sb-admin-2.min.js}"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+    <!--    Markdown-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.2.0/markdown-it.min.js"
+            integrity="sha512-cTQeM/op796Fp1ZUxfech8gSMLT/HvrXMkRGdGZGQnbwuq/obG0UtcL04eByVa99qJik7WlnlQOr5/Fw5B36aw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
-<!--    Markdown-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.2.0/markdown-it.min.js"
-        integrity="sha512-cTQeM/op796Fp1ZUxfech8gSMLT/HvrXMkRGdGZGQnbwuq/obG0UtcL04eByVa99qJik7WlnlQOr5/Fw5B36aw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/mermaid/8.11.2/mermaid.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script th:src="@{../js/editormd.js}"></script>
+    <script type="text/javascript">
+        $(function () {
+            // let editor = editormd("test-editor", {
+            //     // width  : "100%",
+            //     // height : "100%",
+            //     path   : "../lib/"
+            // });
+            let editor = editormd("test-editor", { //注意1：这里的就是上面的DIV的id属性值
+                placeholder: '欢迎使用博客',
+                // width : "90%",
+                height: 400,
+                syncScrolling: "single",
+                emoji: true,
+                path: "../lib/", //注意2：你的路径
+                saveHTMLToTextarea: true,
+                tocm: true, // Using [TOCM]
+                tex: true, // 开启科学公式TeX语言支持，默认关闭
+                flowChart: true, // 开启流程图支持，默认关闭
+                pluginPath: '../plugin/',
+                /* 上传图片配置 */
+                imageUpload: true,
+                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp", "jpeg"],
+                imageUploadURL: "/admin/image", //注意你后端的上传图片服务地址
+            })
 
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/mermaid/8.11.2/mermaid.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-
-<script type="text/javascript">
-    mermaid.initialize({startOnLoad:true});
-    hljs.highlightAll();
-    const mermaidChart = (code) => {
-        try {
-            return `<div class="mermaid">${code}</div>`
-        } catch ({str, hash}) {
-            return `<pre>${str}</pre>`
-        }
-    }
-    let md = window.markdownit({
-        highlight: function (str, lang) {
-            mermaid.initialize({startOnLoad:true});
-            let esc = md.utils.escapeHtml;
-            console.log(lang)
-            console.log(str)
-            if (lang && hljs.getLanguage(lang)) {
-                try {
-                    // return hljs.highlight(lang, str, true).value;
-                    return  '<pre class="hljs"><code>' +hljs.highlight(lang, str, true).value +    '</code></pre>';
-                } catch (__) {
-                }
-            } else if (lang === 'mermaid') {
-                // return mermaidChart(str)
-                return '<pre class="mermaid">' + mermaid.mermaidAPI.render('mermaid', str) + '</pre>';
-                // return '<pre class="mermaid">' + mermaid.mermaidAPI.render('mermaid', str) + '</pre>';
-                // return  mermaid.mermaidAPI.render('mermaid', str) ;
-
-            } else {
-                return '<pre class="hljs"><code>' + esc(str) + '</code></pre>';
+        });
+    </script>
+    <script type="text/javascript">
+        mermaid.initialize({startOnLoad: true});
+        hljs.highlightAll();
+        const mermaidChart = (code) => {
+            try {
+                return `<div class="mermaid">${code}</div>`
+            } catch ({str, hash}) {
+                return `<pre>${str}</pre>`
             }
-            return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
-        },
-        html:true,
-        linkify:true,
-        typographer:true,
-    }).enable('image').enable([ 'link' ]);
+        }
+        // let md = window.markdownit({
+        //     highlight: function (str, lang) {
+        //         mermaid.initialize({startOnLoad:true});
+        //         let esc = md.utils.escapeHtml;
+        //         console.log(lang)
+        //         console.log(str)
+        //         if (lang && hljs.getLanguage(lang)) {
+        //             try {
+        //                 // return hljs.highlight(lang, str, true).value;
+        //                 return  '<pre class="hljs"><code>' +hljs.highlight(lang, str, true).value +    '</code></pre>';
+        //             } catch (__) {
+        //             }
+        //         } else if (lang === 'mermaid') {
+        //             // return mermaidChart(str)
+        //             return '<pre class="mermaid">' + mermaid.mermaidAPI.render('mermaid', str) + '</pre>';
+        //             // return '<pre class="mermaid">' + mermaid.mermaidAPI.render('mermaid', str) + '</pre>';
+        //             // return  mermaid.mermaidAPI.render('mermaid', str) ;
+        //
+        //         } else {
+        //             return '<pre class="hljs"><code>' + esc(str) + '</code></pre>';
+        //         }
+        //         return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+        //     },
+        //     html:true,
+        //     linkify:true,
+        //     typographer:true,
+        // }).enable('image').enable([ 'link' ]);
 
-    function convert() {
+        // function convert() {
+        //
+        //     let text = document.getElementById("oriContent").value;
+        //     let result = md.render(text)
+        //     document.getElementById("result").innerHTML = result;
+        //
+        // }
 
-        let text = document.getElementById("oriContent").value;
-        let result = md.render(text)
-        document.getElementById("result").innerHTML = result;
 
-    }
-
-
-</script>
+    </script>
 
 </body>
 
