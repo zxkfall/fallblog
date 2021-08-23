@@ -43,14 +43,10 @@ public class RSAUtil {
         System.out.println("公钥："+ new String(Base64.getEncoder().encode(publicKey), StandardCharsets.UTF_8));
         System.out.println("私钥："+ new String(Base64.getEncoder().encode(privateKey),StandardCharsets.UTF_8));
 
-
-
         byte[] encryptByPublicKey = encryptByPublicKey(password.getBytes(), publicKey);
         System.out.println("使用公钥加密后的数据："+ new String(Base64.getEncoder().encode(encryptByPublicKey),StandardCharsets.UTF_8));
-
         byte[] decryptByPrivateKey = decryptByPrivateKey(encryptByPublicKey, privateKey);
         System.out.println("使用私钥解密后的数据："+new String(decryptByPrivateKey));
-
     }
 
     /**

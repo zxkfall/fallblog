@@ -2,19 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragment/header::head(Article)}">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Oleez :: Blog Post</title>
-    <link rel="stylesheet" href="../../static/vendors/animate.css/animate.min.css">
-    <link rel="stylesheet" href="../../static/vendors/fancybox/jquery.fancybox.min.css">
-    <link rel="stylesheet" href="../../static/css/style.css">
-    <script src="../../static/vendors/jquery/jquery.min.js"></script>
-    <script src="../../static/js/loader.js"></script>
 </head>
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/a11y-dark.min.css"/>
-
 </head>
 <body>
 <div class="oleez-loader"></div>
@@ -105,17 +95,6 @@
                             <a href="https://www.instagram.com/">In</a>
                             <a href="https://www.zhihu.com/">ZH</a>
                         </nav>
-                    </div>
-                </div>
-                <div class="sidebar-widget wow fadeInUp">
-                    <h5 class="widget-title">Gallery</h5>
-                    <div class="widget-content">
-                        <div class="gallery">
-                            <a th:each="image :${imagelist}" th:href="@{/images/{name}(name=${image.name})}" class="gallery-grid-item"
-                               data-fancybox="widget-gallery">
-                                <img th:src="@{/images/{name}(name=${image.name})}" alt="gallery item">
-                            </a>
-                        </div>
                     </div>
                 </div>
 

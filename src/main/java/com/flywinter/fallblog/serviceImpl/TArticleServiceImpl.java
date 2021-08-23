@@ -17,4 +17,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class TArticleServiceImpl extends ServiceImpl<TArticleMapper, TArticle> implements ITArticleService {
 
+
 }

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -271,7 +270,6 @@ public class AdminController {
     public String deleteTag(@PathVariable("id") Long id) {
         int i = tagMapper.deleteById(id);
         return "redirect:/admin/tag";
-
     }
 
 
