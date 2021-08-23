@@ -2,8 +2,12 @@ package com.flywinter.fallblog.controller.admin;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.flywinter.fallblog.dto.ArticleCategory;
+import com.flywinter.fallblog.dto.WeekView;
 import com.flywinter.fallblog.entity.*;
 import com.flywinter.fallblog.mapper.*;
+import com.flywinter.fallblog.mymapper.MyArticleCategoryMapper;
+import com.flywinter.fallblog.mymapper.MyWebViewPeopleMapper;
 import com.flywinter.fallblog.service.ITImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +66,36 @@ public class AdminController {
         return "admin/forget";
     }
 
+    @Autowired
+    TWebViewPeopleMapper webViewPeopleMapper;
+    @Autowired
+    MyWebViewPeopleMapper myWebViewPeopleMapper;
+    @Autowired
+    MyArticleCategoryMapper myArticleCategoryMapper;
+
     /**
      * @return
      * @description 管理页首页，展示各种基本信息
      */
     @GetMapping("/admin")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        Integer totalView = webViewPeopleMapper.selectCount(null);
+        List<WeekView> recentWeekView = myWebViewPeopleMapper.getRecentWeekView();
+        Integer articleCount = articleMapper.selectCount(null);
+        Integer commentCount = commentMapper.selectCount(null);
+        List<ArticleCategory> articleCategory = myArticleCategoryMapper.getArticleCategory();
+
+        int weekCount = 0;
+        for (WeekView weekView : recentWeekView) {
+            weekCount += weekView.getCount();
+        }
+        model.addAttribute("totalView", totalView);
+        model.addAttribute("recentWeekView", recentWeekView);
+        model.addAttribute("weekCount", weekCount);
+        model.addAttribute("articleCount", articleCount);
+        model.addAttribute("commentCount", commentCount);
+        model.addAttribute("articleCategory", articleCategory);
+
         return "admin/dashboard";
     }
 
@@ -120,10 +148,11 @@ public class AdminController {
         int i = articleMapper.updateById(updateArticle);
         return "redirect:/admin/publish";
     }
+
     @GetMapping("/admin/article/{id}")
-    public String getArticle(@PathVariable("id") String id,Model model) {
+    public String getArticle(@PathVariable("id") String id, Model model) {
         TArticle getArticle = articleMapper.selectById(id);
-        model.addAttribute("getarticle",getArticle);
+        model.addAttribute("getarticle", getArticle);
         List<TCategory> categories = categoryMapper.selectList(null);
         model.addAttribute("categories", categories);
         List<TTag> tTags = tagMapper.selectList(null);
@@ -141,12 +170,12 @@ public class AdminController {
     @GetMapping("/admin/article")
     public String article(Model model) {
         List<TArticle> articles = articleMapper.selectList(null);
-        model.addAttribute("articles",articles);
+        model.addAttribute("articles", articles);
         return "admin/article";
     }
 
     @PostMapping("/admin/article/{id}")
-    public String deleteArticle(@PathVariable("id") String id,@RequestParam("isdelete") String del){
+    public String deleteArticle(@PathVariable("id") String id, @RequestParam("isdelete") String del) {
         if (del.equals("delete")) {
             int i = articleMapper.deleteById(id);
         }
@@ -155,11 +184,20 @@ public class AdminController {
 
     @Autowired
     TCommentMapper commentMapper;
+
     @GetMapping("/admin/comment")
     public String comment(Model model) {
         List<TComment> comments = commentMapper.selectList(null);
-        model.addAttribute("comments",comments);
+        model.addAttribute("comments", comments);
         return "admin/comment";
+    }
+    @PostMapping("/admin/comment/{id}")
+    public String comment(@PathVariable("id")String id) {
+        TComment comment = commentMapper.selectById(id);
+        comment.setStatus(0);
+        comment.setUpdateTime(LocalDateTime.now());
+        commentMapper.updateById(comment);
+        return "redirect:/admin/comment";
     }
 
     @Autowired
@@ -246,10 +284,11 @@ public class AdminController {
 
     @Autowired
     TImageMapper imageMapper;
+
     @GetMapping("/admin/images")
     public String images(Model model) {
         List<TImage> imageList = imageMapper.selectList(null);
-        log.debug(imageList.size()+"");
+        log.debug(imageList.size() + "");
         model.addAttribute("imagelist", imageList);
         return "admin/images";
     }

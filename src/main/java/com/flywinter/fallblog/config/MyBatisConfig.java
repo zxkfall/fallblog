@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @MapperScan("com.flywinter.fallblog.mapper")
+@MapperScan("com.flywinter.fallblog.mymapper")
 public class MyBatisConfig {
     // 最新版 分页 乐观锁
     @Bean

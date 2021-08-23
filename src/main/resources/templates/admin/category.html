@@ -128,7 +128,7 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Category</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -211,12 +211,21 @@
 <script th:src="@{../js/sb-admin-2.min.js}"></script>
 
 <!-- Page level plugins -->
-<script th:src="@{../vendors/chart.js/Chart.min.js}"></script>
 
+<script th:src="@{../vendors/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{../vendors/datatables/dataTables.bootstrap4.min.js}"></script>
 <!-- Page level custom scripts -->
-<script th:src="@{../js/demo/chart-area-demo.js}"></script>
-<script th:src="@{../js/demo/chart-pie-demo.js}"></script>
+
+<!--<script th:src="@{../js/demo/datatables-demo.js}"></script>-->
+
 <script type="text/javascript">
+
+    // Call the dataTables jQuery plugin
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+
+
     $('#edit_category').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget) // Button that triggered the modal
         let id = button.data('id') // Extract info from data-* attributes

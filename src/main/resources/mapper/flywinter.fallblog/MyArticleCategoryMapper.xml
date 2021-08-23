@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flywinter.fallblog.mymapper.MyArticleCategoryMapper">
+
+    <select id="getArticleCategory" resultType="com.flywinter.fallblog.dto.ArticleCategory">
+        select c.name name, count(c.name) count
+        from t_article a
+                 left join t_category c on a.category_id = c.id
+        group by a.category_id;
+    </select>
+
+</mapper>

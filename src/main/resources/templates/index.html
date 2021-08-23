@@ -25,10 +25,8 @@
                 </article>
 
                 <nav class="oleez-pagination wow fadeInUp">
-                    <a href="#!" class="active">01</a>
-                    <a href="#!">02</a>
-                    <a href="#!">03</a>
-                    <a href="#!" class="next">&rarr;</a>
+                    <a th:href="@{/page/{index}(index=${pagee})}" th:each="pagee :${pagelist}" th:text="${pagee}" th:class="${pagee == pageCurrent?'active':''}"></a>
+                    <a th:href="@{/page/{index}(index=${pageCurrent+1})}"  class="next">&rarr;</a>
                 </nav>
             </div>
             <div class="col-md-4">

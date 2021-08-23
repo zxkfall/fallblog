@@ -7,13 +7,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.flywinter.fallblog.entity.TImage;
 import com.flywinter.fallblog.entity.TTag;
 import com.flywinter.fallblog.entity.TUser;
-import com.flywinter.fallblog.mapper.TArticleMapper;
-import com.flywinter.fallblog.mapper.TImageMapper;
-import com.flywinter.fallblog.mapper.TTagMapper;
-import com.flywinter.fallblog.mapper.TUserMapper;
-import lombok.Data;
+import com.flywinter.fallblog.dto.WeekView;
+import com.flywinter.fallblog.mapper.*;
+import com.flywinter.fallblog.mymapper.MyWebViewPeopleMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +21,6 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -97,7 +93,7 @@ class FallblogApplicationTests {
     TImageMapper tImagesMapper;
     @Test
     public void testPage(){
-        Page<TImage> page = new Page<>(0,5);
+        Page<TImage> page = new Page<>(2,5);
         page.addOrder(OrderItem.asc("update_time"));
         Page<TImage> page1 = tImagesMapper.selectPage(page, Wrappers.<TImage>lambdaQuery().eq(TImage::getType, "jpeg"));
         log.error("总条数 -------------> {}", page1.getTotal());
@@ -109,6 +105,16 @@ class FallblogApplicationTests {
         }
     }
 
+    @Autowired
+    TWebViewPeopleMapper webViewPeopleMapper;
+    @Autowired
+    MyWebViewPeopleMapper myWebViewPeopleMapper;
+
+    @Test
+    public void testViewPeople(){
+        List<WeekView> recentWeekView = myWebViewPeopleMapper.getRecentWeekView();
+        System.out.println(recentWeekView);
+    }
 
 }
 
